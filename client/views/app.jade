@@ -1,0 +1,24 @@
+!!! 5
+html(lang="en")
+  head
+    != SocketStream
+    meta(charset="utf-8")
+    title Welcome
+  body
+    #content
+      a(href='https://github.com/socketstream/socketstream')
+        img(src='/images/roshambo_logo.png', alt='SocketStream Logo', width=269, height=47)
+      h1 Welcome to the chat demo!
+      h2 Current Server time
+      p#serverTime time
+      
+      // QUICK CHAT DEMO
+      form#demo(onsubmit='return false')
+        h3 Quick Chat Demo
+        h5 Open this page in multiple tabs or browsers and type a message below
+        #chatlog
+        input(id='myMessage', type='text', autocomplete='off')
+        
+      form#signIn.views.hidden(onsubmit='return false')
+        h1 Please enter a username to begin:
+        input(id='myLogin', type='text', autocomplete='off')

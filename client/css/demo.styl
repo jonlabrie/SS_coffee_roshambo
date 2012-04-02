@@ -1,0 +1,94 @@
+// Quick Chat Demo
+
+@import 'helpers'
+// SIGN IN VIEW
+
+#signIn
+  top 0px
+  bottom 0px
+  left 0px 
+  right 0px
+  position absolute
+  width 100%
+  height 100%
+  background-color #ddd
+  vertical-gradient #fff, #ddd
+  background-position bottom center
+  background-repeat no-repeat
+  text-align center
+
+  h1
+    margin 10em 0em 1em
+    font-size 20pt
+    color #888
+    font-weight 300
+
+  input[type="text"]
+    text-align center
+    font-size 20pt
+    padding 5px
+    border solid 1px #ccc
+    color #555
+    round 5px
+
+#signInError
+  margin-top 10px
+  color #FF5555
+  font-size 12pt
+  round 5px
+
+// Main Demo view
+#demo
+  border 1px solid #ccc
+  width 700px
+  text-align left
+  margin 50px auto
+  padding 15px
+  round 5px
+  h3
+    margin 0
+    font-size 1.0em
+    font-weight normal
+  h5
+    margin 0
+    padding 5px 0
+    color #666
+    font-weight normal
+    font-size 0.8em
+  #myMessage, #chatlog, #serverTime
+    border none
+    box-shadow inset 0 0 2px #777
+    round 5px
+  #myMessage
+    width 690px
+    padding 5px
+    margin 0
+  #chatlog
+    width 700px
+    background-color white
+    margin 5px 0
+    p
+      font-size 0.9em
+      color #000a68
+      padding 3px 9px
+      margin 0
+    p:first-child
+      padding-top 9px
+    p:last-child
+      padding-bottom 9px
+    span.time
+      color #666
+      float right
+      width 70px
+      text-align right
+      font-size 0.7em
+  #serverTime
+    width 700px
+    background-color white
+    margin 5px 0
+    p
+      font-size 0.9em
+      color #000a68
+      padding 3px 9px
+      margin 0
+  
