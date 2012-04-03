@@ -2,42 +2,46 @@
 
 # Delete this file once you've seen how the demo works
 
-# Listen out for newMessage events coming from the server
-ss.event.on 'newMessage', (message) ->
-
-  # Example of using the Hogan Template in client/templates/chat/message.jade to generate HTML for each message
-  html = HT['chat-message'].render({message: message, time: -> timestamp() })
-
-  # Append it to the #chatlog div and show effect
-  $(html).hide().appendTo('#chatlog').slideDown()
-
-#Listen out for newServerTime events coming from the server
-ss.event.on 'newServerTime', (serverTime) ->
+exports.init = ->
   
-  html = HT['chat-time'].render({time: serverTime})
+  $('#demo').hide()
 
-  # $('#serverTime').replaceWith(html)
-
-  document.getElementById('serverTime').innerHTML = serverTime
   
-# $('#demo').hide()
+  # Listen out for newMessage events coming from the server
+  ss.event.on 'newMessage', (params) ->
+    username = params.user
+    message = params.body
+    console.log(username)
+    # Example of using the Hogan Template in client/templates/chat/message.jade to generate HTML for each message
+    html = HT['chat-message'].render({username: username, message: message, time: -> timestamp() })
+
+    # Append it to the #chatlog div and show effect
+    $(html).hide().appendTo('#chatlog').slideDown()
+
+  #Listen out for newServerTime events coming from the server
+  ss.event.on 'newServerTime', (serverTime) ->
+  
+    html = HT['chat-time'].render({time: serverTime})
+
+    # $('#serverTime').replaceWith(html)
+
+    document.getElementById('serverTime').innerHTML = serverTime  
     
-# Show the chat form and bind to the submit action
+  # Show the chat form and bind to the submit action
     
-$('#demo').on 'submit', ->
+  $('form#demo').submit ->
+    text = $('#myMessage').val()
 
-  # Grab the message from the text box
-  text = $('#myMessage').val()
+    # Call the 'send' funtion (below) to ensure it's valid before sending to the server  
+    exports.send text, (success) ->
+      if success
+        $('#myMessage').val('') # clear text box
+      else
+        alert('Oops! Unable to send message')
+        
+  exports.checkSession()
 
-  # Call the 'send' funtion (below) to ensure it's valid before sending to the server
-  
-  exports.send text, (success) ->
-    if success
-      $('#myMessage').val('') # clear text box
-    else
-      alert('Oops! Unable to send message')
-
-# Demonstrates sharing code between modules by exporting function
+  # Demonstrates sharing code between modules by exporting function
   
 exports.send = (text, cb) ->
   if valid(text)
@@ -45,23 +49,18 @@ exports.send = (text, cb) ->
   else
     cb(false)
 
+exports.checkSession = (user) ->
+  ss.rpc('demo.checkSession', user)
+  if user then $('#demo').show() else displaySignInForm()
+
 # Private functions
 
-# checkUser = (user) ->
-#  ss.rpc('demo.checkUser', user)
-#  if user
-#    $('#demo').show
-#  else
- #   displaySignInForm()
-
-displaySignInForm = ->
-  $('#signIn').on 'submit', -> 
-    login = $('#myLogin').val()
-    console.log(login)
- #   ss.rpc('demo.signIn', login, cb) ->
- #     $('#signInError').remove()
- #     displayMainScreen()
-    false
+displaySignInForm = (response) ->
+  $('#signIn').show().submit ->
+    loginName = $('#login').val()
+    ss.rpc('demo.signIn', loginName, response)
+    $('#signInError').remove()
+    displayMainScreen()
 
 displayMainScreen = ->
   $('#signIn').fadeOut(230) and $('#demo').show()
@@ -75,3 +74,5 @@ pad2 = (number) ->
 
 valid = (text) ->
   text && text.length > 0
+  
+exports.init()
