@@ -1,0 +1,62 @@
+!!! 5
+html(lang="en")
+  head
+  meta(charset="utf-8")
+  title CSS Flip-Counter Experiment
+
+<!-- Counter script -->
+<script type="text/javascript" src="js/flipcounter.js"></script>
+<script type="text/javascript" src="js/modernizr.custom.36365.js"></script>
+<!-- Counter styles -->
+<link rel="stylesheet" type="text/css" href="css/default.css" />
+<link rel="stylesheet" type="text/css" href="css/small.css" />
+<link rel="stylesheet" type="text/css" href="css/light.css" />
+<link rel="stylesheet" type="text/css" href="css/huge.css" />
+
+  body
+    h1 CSS FLIP-COUNTER
+    h1 EXPERIMENT
+    #wrapper
+      #flip-display(class="default")
+      
+
+</div>
+<script>
+$(function(){
+// Initialize a new counter
+var myCounter = new flipCounter('flip-counter', {value:1000, inc:123, pace:800, auto:true});
+$("a.change-style").click(function(){
+$("#flip-counter").removeClass().addClass($(this).data("style"));
+$("#style-switch a").removeClass("active");
+$(this).addClass("active");
+});
+/**
+* Demo controls
+*/
+// Increment
+$("#inc_slider").slider({
+range: "max",
+value: 123,
+min: 0,
+max: 1000,
+slide: function( event, ui ) {
+myCounter.setIncrement(ui.value);
+$("#inc_value").text(ui.value);
+if (ui.value == 0) myCounter.setAuto(false);
+else myCounter.setAuto(true);
+}
+});
+// Pace
+$("#pace_slider").slider({
+range: "max",
+value: 800,
+min: 300,
+max: 2000,
+step: 100,
+slide: function( event, ui ) {
+myCounter.setPace(ui.value);
+$("#pace_value").text(ui.value);
+}
+});
+});
+</script>
