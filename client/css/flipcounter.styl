@@ -1,0 +1,102 @@
+.flip-display
+  padding-top: 30px
+  position: relative
+  height: 85px
+
+.flip-display ul
+  list-style-type: none
+  font-family: 'Ubuntu', sans-serif
+  font-weight: 600
+  color: #fff
+
+.flip-display ul li
+  float: left
+  margin: 4px
+
+.flip-display li.digit .digit-wrap
+  width: 30px
+  height: 45px
+  line-height: 46px
+  font-size: 40px
+  background: #151515
+  text-align: center
+  position: relative
+  display: inline-block
+  perspective: 300
+  -webkit-perspective: 300
+  -webkit-box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 1)
+  -moz-box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 1)
+  box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 1)
+  text-shadow: 0px 0px 1px #fff
+  -webkit-box-reflect: below 6px -webkit-gradient(linear, left top, left bottom, color-stop(100%,rgba(255,255,255,.2)), color-stop(65%,rgba(255,255,255,0)))
+
+.flip-display li.digit .bottom-old span,
+.flip-display li.digit .digit-hinge .bottom-new span
+  display: block
+  margin-top: -23px
+
+.flip-display li.digit div
+  -webkit-border-radius: 5px
+  -moz-border-radius: 5px
+  border-radius: 5px
+  background: #151515
+
+.flip-display li.digit .top-new
+  position: absolute
+  color: #fff
+  width: 100%
+  height: 100%
+
+.flip-display li.digit .bottom-old
+  height: 50%
+  top: 50%
+  width: 100%
+  position: absolute
+  overflow: hidden
+  z-index: -1
+
+.flip-display li.digit .shadow
+  border-bottom: 1px solid #000
+  background: none
+  height: 50%
+  width: 100%
+  position: absolute
+  top: 0
+  z-index: 100
+  -webkit-box-shadow: 0px 4px 7px -4px rgba(0, 0, 0, 1)
+  -moz-box-shadow: 0px 4px 7px -4px rgba(0, 0, 0, 1)
+  box-shadow: 0px 4px 7px -4px rgba(0, 0, 0, 1)
+  -webkit-border-radius: 0px
+  -moz-border-radius: 0px
+  border-radius: 0px
+
+.flip-display li.digit .digit-hinge
+  height: 50%
+  width: 100%
+  position: absolute
+  z-index: 10
+  -moz-transform-origin: 50% 100%
+  -webkit-transform-origin: 50% 100%
+  -webkit-transition: -webkit-transform .2s ease-in
+  -moz-transition: -moz-transform .2s ease-in
+
+.flip-display li.digit .digit-hinge .top-old,
+.flip-display li.digit .digit-hinge .bottom-new
+  position: absolute
+  width: 100%
+  height: 100%
+  top: 0px
+  overflow: hidden
+  -backface-visibility: hidden
+  -webkit-backface-visibility: hidden
+  z-index: 10
+
+.flip-display li.digit .digit-hinge .bottom-new
+  -webkit-transform: rotateX(-180deg)
+  -moz-transform: rotateX(-180deg)
+
+.digit-wrap.do-digit-animate
+  .digit-hinge
+    -webkit-transform: rotateX(-180deg)
+    -moz-transform: rotateX(-180deg)
+

@@ -6,7 +6,7 @@ flipDisplay = (d, options) ->
     padChar: " "
     displayWidth: 15
     numChars: 99
-    pace: 1000
+    pace: 500
     hold: 10000
     auto: true
     tFH: 12
@@ -434,6 +434,7 @@ flipDisplay = (d, options) ->
   getSequenceId = (c) ->
     id = ((chars[c].column) * 33) + (chars[c].row)
     id
+    
   messageDisplay = ->
     newLine = ""
     if messagesUrgent.length > 0
@@ -445,6 +446,7 @@ flipDisplay = (d, options) ->
     else
       clearNext()
       nextChange = setTimeout(messageDisplay, o.hold)
+      
   arraysEqual = (arr1, arr2) ->
     return false  if arr1.length isnt arr2.length
     i = arr1.length
@@ -452,6 +454,7 @@ flipDisplay = (d, options) ->
     while i--
       return false  if arr1[i] isnt arr2[i]
     true
+    
   addPad = (message) ->
     messagePadded = message
     i = message.length
@@ -460,9 +463,10 @@ flipDisplay = (d, options) ->
       messagePadded = messagePadded + o.padChar
       i++
     messagePadded
+    
   messageDirect = (x) ->
-    messageOld = o.currentMessage.split("").reverse()
-    messageNew = x.split("").reverse()
+    messageOld = o.currentMessage.split("")
+    messageNew = x.split("")
     unless arraysEqual(messageOld, messageNew)
       i = 0
 
@@ -474,11 +478,11 @@ flipDisplay = (d, options) ->
       clearNext()
       nextChange = setTimeout(messageDisplay, o.hold)
     o.currentMessage = x
+    
   messageTumble = (x) ->
     animateMessage = ->
       unless arraysEqual(messageOld, messageNew)
         i = 0
-
         while i < o.displayWidth
           if messageOld[i] isnt messageNew[i]
             sequenceOld = sequence.indexOf(messageOld[i])
@@ -492,50 +496,44 @@ flipDisplay = (d, options) ->
         setTimeout animateMessage, o.pace
       clearNext()
       nextChange = setTimeout(messageDisplay, o.hold)
-    messageOld = o.currentMessage.split("").reverse()
-    messageNew = x.split("").reverse()
+      
+    messageOld = o.currentMessage.split("")
+    messageNew = x.split("")
     o.currentMessage = x
+    
     animateMessage()
+   
   animateChar = (n, oldChar, newChar) ->
-    animate = ->
-      if step < 7
-        w = (if step < 3 then "t" else "b")
-        a = doc.getElementById(divId + "_" + w + "_d" + n)
-        a.style.backgroundPosition = bp[step]  if a
-        step++
-        unless step is 3
-          setTimeout animate, speed
-        else
-          animate()
-    speed = o.pace / 3
-    step = 0
-    w = undefined
-    a = undefined
-    bp = [ "-" + ((chars[oldChar].column * o.cW) + o.fW) + "px -" + (chars[oldChar].row * o.tFH) + "px", "-" + (chars[oldChar].column * o.cW) + (o.fW * 2) + "px -" + (chars[oldChar].row * o.tFH) + "px", "-" + (chars[newChar].column * o.cW) + "px -" + (chars[newChar].row * o.tFH) + "px", "-" + (chars[oldChar].column * o.cW) + (o.fW * 6) + "px -" + (chars[oldChar].row * o.bFH) + "px", "-" + (chars[newChar].column * o.cW) + (o.fW * 5) + "px -" + (chars[newChar].row * o.bFH) + "px", "-" + (chars[newChar].column * o.cW) + (o.fW * 4) + "px -" + (chars[newChar].row * o.bFH) + "px", "-" + (chars[newChar].column * o.cW) + (o.fW * 3) + "px -" + (chars[newChar].row * o.bFH) + "px" ]
-    animate()
+    a = doc.getElementById("digit-a" + n)
+    a.className = 'digit-wrap'
+    a.innerHTML = '<div class="shadow"></div>' +
+    '<div class="top-new"><span>' + newChar + '</span></div>' +
+    '<div class="digit-hinge"><div class="top-old"><span>' + oldChar + '</span></div>' +
+    '<div class="bottom-new"><span>' + newChar + '</span></div></div>' +
+    '<div class="bottom-old"><span>' + oldChar + '</span></div>'
+    a.className = 'digit-wrap do-digit-animate'
     
-    # Set up the display
-    
+    #Set up the display
+      
   displaySet = ->
     count = o.displayWidth
-    i = undefined
+    ch = "<ul>"
+    cNew = o.padChar
+    cOld = o.padChar
     i = 0
     while i < count
-      newCharacter = doc.createElement("ul")
-      newCharacter.className = "cd"
-      newCharacter.id = divId + "_d" + i
-      newCharacter.innerHTML = '<li class="t" id="' + divId + '_t_d' + i + '"></li><li class="b" id="' + divId + "_b_d" + i + '"></li>'
-      div.insertBefore newCharacter, div.firstChild
+      ch += '<li class="digit"><div id="digit-a' + i + '" class="digit-wrap"><div class="shadow"></div>' +
+      '<div class="top-new"><span>' + cNew + '</span></div>' +
+      '<div class="digit-hinge"><div class="top-old"><span>' + cOld + '</span></div>' +
+      '<div class="bottom-new"><span>' + cNew + '</span></div></div>' +
+      '<div class="bottom-old"><span>' + cOld + '</span></div></div></li>'
+      o.currentMessage += o.padChar
       i++
-    i = 0
-    while i < count
-      doc.getElementById(divId + "_t_d" + i).style.backgroundPosition = "-" + (chars[o.padChar].column * o.cW) + "px -" + (chars[o.padChar].row * o.tFH) + "px"
-      doc.getElementById(divId + "_b_d" + i).style.backgroundPosition = "-" + ((chars[o.padChar].column * o.cW) + (o.fW * 3)) + "px -" + (chars[o.padChar].row * o.bFH) + "px"
-      o.currentMessage = o.currentMessage + o.padChar
-      i++
-    nextCount = setTimeout(messageDisplay, o.hold)  if o.auto is true
-    
-    # clear a Timer
+    ch += "</ul>"
+    div.innerHTML = ch
+    nextCount = setTimeout(messageDisplay, o.hold)
+      
+  # clear a Timer
     
   clearNext = ->
     clearTimeout nextChange
@@ -588,7 +586,7 @@ exports.init = ->
   
   $('#demo').hide()
   
-  myDisplay = new flipDisplay('flip-display',{pace:100, auto:true, displayWidth:15, hold: 5000})
+  myDisplay = new flipDisplay('flip-display',{pace:200, auto:true, displayWidth:15, hold: 5000})
 
   # Listen out for newMessage events coming from the server
   ss.event.on 'newMessage', (params) ->
